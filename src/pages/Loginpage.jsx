@@ -11,31 +11,20 @@ function Loginpage() {
     e.preventDefault();
     setMessage("");
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    // Demo mode - bypass authentication for presentation
+    if (email && password) {
+      setMessage("✅ Login successful! Redirecting...");
+      
+      // Save demo credentials
+      localStorage.setItem("token", "demo-token");
+      localStorage.setItem("email", email);
 
-      const data = await res.json();
-
-      if (res.ok) {
-       
-
-        // Save JWT token and email
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("email", email);
-
-        // Redirect to dashboard or home page
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 1000);
-      } else {
-        setMessage("❌ " + data.message);
-      }
-    } catch (error) {
-      setMessage("❌ Something went wrong. Server not reachable.");
+      // Redirect to dashboard
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+    } else {
+      setMessage("❌ Please enter email and password");
     }
   };
   return (
@@ -64,8 +53,11 @@ function Loginpage() {
           AN EPC COMPANY | DESIGN TO DELIVER
         </Typography>
         <Box sx={{ width: "100%", height: "1px", backgroundColor: "#ddd", mb: 2 }} />
-        <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+        <Typography variant="h5" sx={{ mb: 1, fontWeight: "bold" }}>
           Login
+        </Typography>
+        <Typography variant="body2" sx={{ mb: 2, color: "#666", fontStyle: "italic" }}>
+          Demo Mode - Use any email and password
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -74,6 +66,7 @@ function Loginpage() {
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="demo@labh.com"
             sx={{ mb: 2 }}
             required
           />
@@ -83,6 +76,7 @@ function Loginpage() {
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="demo123"
             sx={{ mb: 2 }}
             required
           />
