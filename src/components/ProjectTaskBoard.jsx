@@ -22,23 +22,24 @@ import TimelineForm from "./forms/TimelineForm";
 const ProjectTaskBoard = ({ title, onBack }) => {
   const [openTask, setOpenTask] = useState(null);
   const [formType, setFormType] = useState(null);
+  const [selectedSubTask, setSelectedSubTask] = useState(null);
 
   const tasks = [
     {
       id: 1,
       title: "Admin FF",
       subTasks: [
-        { id: 1.1, name: "RCC Column Casting", status: "Available", uom: "SQM", qty: 166 },
-        { id: 1.2, name: "RCC Slab/Beam", status: "Available", uom: "CUM", qty: 24 },
-        { id: 1.3, name: "Staircase fixing", status: "Available", uom: "SQM", qty: 36 },
+        { id: 1.1, name: "RCC Column Casting", designStatus: "Available", uom: "SQM", qty: 166 },
+        { id: 1.2, name: "RCC Slab/Beam", designStatus: "Available", uom: "CUM", qty: 24 },
+        { id: 1.3, name: "Staircase fixing", designStatus: "Available", uom: "SQM", qty: 36 },
       ],
     },
     {
       id: 2,
       title: "Admin Terrace & External",
       subTasks: [
-        { id: 2.1, name: "Water tank relocation", status: "N/A", uom: "NOS", qty: 3 },
-        { id: 2.2, name: "External paint work", status: "Done", uom: "SQM", qty: 120 },
+        { id: 2.1, name: "Water tank relocation", designStatus: "N/A", uom: "NOS", qty: 3 },
+        { id: 2.2, name: "External paint work", designStatus: "Done", uom: "SQM", qty: 120 },
       ],
     },
   ];
@@ -55,27 +56,23 @@ const ProjectTaskBoard = ({ title, onBack }) => {
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          {title} — Task Tracker
+          {title} 
         </Typography>
 
-        <Box>
-          <Button variant="outlined" sx={{ mr: 1 }} onClick={() => setFormType("design")}>
-            DESIGN [A]
-          </Button>
-          <Button variant="outlined" sx={{ mr: 1 }} onClick={() => setFormType("estimator")}>
-            ESTIMATOR [B]
-          </Button>
-          <Button variant="outlined" sx={{ mr: 1 }} onClick={() => setFormType("execution")}>
-            EXECUTION [C]
-          </Button>
-          <Button variant="outlined" sx={{ mr: 1 }} onClick={() => setFormType("timeline")}>
-            TIMELINE
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => alert("Add Task functionality")}
+            sx={{ textTransform: "none" }}
+          >
+            Add Task
           </Button>
           <Button
             variant="contained"
             color="error"
             onClick={onBack}
-            sx={{ ml: 2, textTransform: "none" }}
+            sx={{ textTransform: "none" }}
           >
             ← Back
           </Button>
@@ -91,7 +88,8 @@ const ProjectTaskBoard = ({ title, onBack }) => {
                 <TableCell>Task</TableCell>
                 <TableCell>UOM</TableCell>
                 <TableCell>Qty</TableCell>
-                <TableCell>Status</TableCell>   
+                <TableCell>Design Status</TableCell>
+                <TableCell>Actions</TableCell>   
               </TableRow>
             </TableHead>
             <TableBody>
@@ -112,21 +110,33 @@ const ProjectTaskBoard = ({ title, onBack }) => {
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
 
                   <TableRow>
-                    <TableCell colSpan={4} sx={{ p: 0, border: 0 }}>
+                    <TableCell colSpan={5} sx={{ p: 0, border: 0 }}>
                       <Collapse in={openTask === task.id}>
-                        <Box sx={{ pl: 6, pr: 2, pb: 1 }}>
-                          {task.subTasks.map((sub) => (
-                            <TableRow key={sub.id}>
-                              <TableCell>{sub.name}</TableCell>
-                              <TableCell>{sub.uom}</TableCell>
-                              <TableCell>{sub.qty}</TableCell>
-                              <TableCell>{sub.status}</TableCell>
-                            </TableRow>
-                          ))}
-                        </Box>
+                        <Table>
+                          <TableBody>
+                            {task.subTasks.map((sub) => (
+                              <TableRow key={sub.id}>
+                                <TableCell sx={{ pl: 6 }}>{sub.name}</TableCell>
+                                <TableCell>{sub.uom}</TableCell>
+                                <TableCell>{sub.qty}</TableCell>
+                                <TableCell>{sub.designStatus}</TableCell>
+                                <TableCell>
+                                  <Button
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() => setSelectedSubTask(sub)}
+                                  >
+                                    View
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </Collapse>
                     </TableCell>
                   </TableRow>
@@ -136,6 +146,39 @@ const ProjectTaskBoard = ({ title, onBack }) => {
           </Table>
         </TableContainer>
       </Paper>
+
+      {/* Subtask Detail View */}
+      {selectedSubTask && (
+        <Paper sx={{ mt: 2, p: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              {selectedSubTask.name}
+            </Typography>
+            <Button onClick={() => setSelectedSubTask(null)}>← Back to Tasks</Button>
+          </Box>
+          
+          <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+            <Button variant="outlined" onClick={() => setFormType("design")}>
+               Add DESIGN [A]
+            </Button>
+            <Button variant="outlined" onClick={() => setFormType("estimator")}>
+              Add ESTIMATOR [B]
+            </Button>
+            <Button variant="outlined" onClick={() => setFormType("execution")}>
+              Add EXECUTION [C]
+            </Button>
+            <Button variant="outlined" onClick={() => setFormType("timeline")}>
+              Add TIMELINE [D]
+            </Button>
+          </Box>
+          
+          <Box>
+            <Typography><strong>UOM:</strong> {selectedSubTask.uom}</Typography>
+            <Typography><strong>Quantity:</strong> {selectedSubTask.qty}</Typography>
+            <Typography><strong>Design Status:</strong> {selectedSubTask.designStatus}</Typography>
+          </Box>
+        </Paper>
+      )}
 
       {/* Forms */}
       {formType === "design" && <DesignForm onClose={() => setFormType(null)} />}

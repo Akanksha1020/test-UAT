@@ -7,19 +7,37 @@ function Loginpage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const storedEmail = localStorage.getItem("email");
-    const storedPassword = localStorage.getItem("password");
+    setMessage("");
 
-    if (email === storedEmail && password === storedPassword) {
-      setMessage("✅ Login successful!");
-      window.location.href = "/";
-    } else {
-      setMessage("❌ Invalid credentials!");
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+       
+
+        // Save JWT token and email
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("email", email);
+
+        // Redirect to dashboard or home page
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+      } else {
+        setMessage("❌ " + data.message);
+      }
+    } catch (error) {
+      setMessage("❌ Something went wrong. Server not reachable.");
     }
   };
-
   return (
     <Box
       sx={{

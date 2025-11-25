@@ -1,26 +1,42 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Paper, Link } from "@mui/material";
 
-function Signinpage() {
+const Signinpage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password || !confirmPassword) {
-      setMessage("⚠️ All fields are required!");
-      return;
-    }
+
     if (password !== confirmPassword) {
       setMessage("❌ Passwords do not match!");
       return;
     }
-    localStorage.setItem("email", email);
-    localStorage.setItem("password", password);
-    setMessage("✅ Registration successful! You can now login.");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage("❌ " + data.message);
+        return;
+      }
+
+      setMessage("✅ Signup successful! Redirecting...");
+      setTimeout(() => (window.location.href = "/login"), 1500);
+
+    } catch (err) {
+      setMessage("❌ Error connecting to server");
+    }
   };
+
 
   return (
     <Box
@@ -116,6 +132,6 @@ function Signinpage() {
       </Paper>
     </Box>
   );
-}
+};
 
 export default Signinpage;

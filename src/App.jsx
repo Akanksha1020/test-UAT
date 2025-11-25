@@ -11,7 +11,8 @@ import Tasktracker from "./pages/Tasktracker";
 import Reports from "./pages/Reports";
 
 function App() {
-  const isAuthenticated = localStorage.getItem("email");
+  const token = localStorage.getItem("token");
+  const isAuthenticated = token && token !== "null" && token !== "undefined";
 
   const ProtectedLayout = ({ children }) => (
     <>

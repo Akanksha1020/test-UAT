@@ -136,43 +136,24 @@ export default function ProjectList() {
                     </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                          borderRadius: "6px",
-                          textTransform: "none",
-                          px: 2,
-                          borderColor: "#1976d2",
-                          color: "#1976d2",
-                          '&:hover': {
-                            backgroundColor: "#1976d2",
-                            color: "white"
-                          }
-                        }}
-                        onClick={() => handleViewProject(project.title)}
-                      >
-                        View
-                      </Button>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        sx={{
-                          borderRadius: "6px",
-                          textTransform: "none",
-                          
-                          px: 2,
-                          backgroundColor: "#4caf50",
-                          '&:hover': {
-                            backgroundColor: "#45a049"
-                          }
-                        }}
-                        onClick={() => alert(`Editing project: ${project.title}`)}
-                      >
-                        Edit
-                      </Button>
-                    </Box>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        borderRadius: "6px",
+                        textTransform: "none",
+                        px: 2,
+                        borderColor: "#1976d2",
+                        color: "#1976d2",
+                        '&:hover': {
+                          backgroundColor: "#1976d2",
+                          color: "white"
+                        }
+                      }}
+                      onClick={() => handleViewProject(project.title)}
+                    >
+                      Open
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
