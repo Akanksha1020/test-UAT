@@ -11,7 +11,7 @@ function Loginpage() {
     e.preventDefault();
     setMessage("");
 
-    // Demo mode - bypass authentication for presentation
+    // DEMO MODE - Comment out this section and uncomment secure auth below for production
     if (email && password) {
       setMessage("✅ Login successful! Redirecting...");
       
@@ -26,6 +26,36 @@ function Loginpage() {
     } else {
       setMessage("❌ Please enter email and password");
     }
+
+    // SECURE AUTHENTICATION - Uncomment this section for production use
+    /*
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("✅ Login successful! Redirecting...");
+
+        // Save JWT token and email
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("email", email);
+
+        // Redirect to dashboard or home page
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+      } else {
+        setMessage("❌ " + data.message);
+      }
+    } catch (error) {
+      setMessage("❌ Something went wrong. Server not reachable.");
+    }
+    */
   };
   return (
     <Box
