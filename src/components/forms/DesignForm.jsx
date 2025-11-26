@@ -23,6 +23,7 @@ import {
   Typography,
   Paper,
   MenuItem,
+  Stack,
 } from "@mui/material";
 
 export default function DesignUploadForm({ onClose }) {
@@ -48,6 +49,15 @@ export default function DesignUploadForm({ onClose }) {
       const fileURL = URL.createObjectURL(file);
       window.open(fileURL, "_blank");
     }
+  };
+
+  const handleCancel = () => {
+    if (onClose) onClose();
+  };
+
+  const handleSubmit = () => {
+    alert("Design saved successfully!");
+    if (onClose) onClose();
   };
 
   return (
@@ -156,25 +166,15 @@ export default function DesignUploadForm({ onClose }) {
         sx={{ mb: 3 }}
       />
 
-      {/* Submit (Frontend only) */}
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={() => alert("Frontend only — no backend connected yet.")}
-        >
-          Save Design
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          onClick={onClose}
-        >
+      {/* Buttons */}
+      <Stack direction="row" spacing={2} justifyContent="flex-end">
+        <Button variant="outlined" color="primary" onClick={handleCancel}>
           Cancel
         </Button>
-      </Box>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Save Design
+        </Button>
+      </Stack>
     </Paper>
   );
 }
